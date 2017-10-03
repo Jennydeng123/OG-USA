@@ -12,6 +12,7 @@ This file calls the following files:
 import numpy as np
 import tax
 
+
 '''
 ------------------------------------------------------------------------
     Functions
@@ -37,6 +38,10 @@ def marg_ut_cons(c, sigma):
     output = c**(-sigma)
     return output
 
+
+c=[0.1, 0.1, 0.1]
+sigma=1
+print(marg_ut_cons(c, sigma))
 
 
 def marg_ut_labor(n, params):
