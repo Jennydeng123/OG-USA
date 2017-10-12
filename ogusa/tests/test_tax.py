@@ -1,8 +1,9 @@
-import tax
 import numpy as np
 import pytest
+import tax
 
-# This is a good start.  I left some comments below 
+
+# This is a good start.  I left some comments below
 
 # I try to use different values for different variables.  That way they do not get mixed
 # up somehow. In test_replacement_vals, nssmat having the same value for each entry in
@@ -158,7 +159,7 @@ def	test_total_taxes():
     BQ = np.array([0.5, 0.5, 0.5, 0.5])
     factor = 1
     T_H = np.array([0.5, 0.5, 0.5, 0.5])
-    j = 1
+    j = 0
     shift = 1
     e = np.array([0.5, 0.5, 0.5, 0.5])
     lambdas = np.array([0.5, 0.5, 0.5, 0.5])
@@ -169,7 +170,7 @@ def	test_total_taxes():
     m_wealth = 3
     tau_payroll = 4
     theta = np.array([ 0.225])
-    tau_bq = 1
+    tau_bq = np.array([1])
     J = 1
     S = 1
 
@@ -222,12 +223,12 @@ def	test_total_taxes():
     m_wealth = 3
     tau_payroll = 4
     theta = np.array([0.225])
-    tau_bq = 1
+    tau_bq = np.array([1])
     J = 1
     S = 1
     method="TPI"
 
     total_taxes = tax.total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, (e, lambdas, method, retire, etr_params, h_wealth, p_wealth, m_wealth, tau_payroll, theta, tau_bq, J, S))
     assert (np.allclose(total_taxes, np.array([[ 1.59285714, 1.59285714, 1.59285714],
- 										   [ 1.59285714, 1.59285714, 1.59285714],
- 										   [ 1.59285714, 1.59285714,1.59285714]])))
+                                               [ 1.59285714, 1.59285714, 1.59285714],
+                                               [ 1.59285714, 1.59285714, 1.59285714]])))

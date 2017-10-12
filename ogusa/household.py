@@ -38,10 +38,11 @@ def marg_ut_cons(c, sigma):
     output = c**(-sigma)
     return output
 
-
-c=[0.1, 0.1, 0.1]
-sigma=1
+c = np.array([1])
+sigma = 5
 print(marg_ut_cons(c, sigma))
+
+
 
 
 def marg_ut_labor(n, params):
@@ -80,6 +81,13 @@ def marg_ut_labor(n, params):
     output = chi_n * deriv
     return output
 
+b_ellipse = 10
+upsilon = 20
+ltilde = 30
+chi_n = np.array([5])
+n = np.array([1])
+print(marg_ut_labor(n, (b_ellipse, upsilon, ltilde, chi_n)))
+
 
 def get_cons(r, w, b, b_splus1, n, BQ, net_tax, params):
     '''
@@ -110,6 +118,19 @@ def get_cons(r, w, b, b_splus1, n, BQ, net_tax, params):
     cons = (1 + r) * b + w * e * n + BQ / \
         lambdas - b_splus1 * np.exp(g_y) - net_tax
     return cons
+
+r = np.array([0.1])
+w = np.array([15])
+b = np.array([5])
+b_splus1 = np.array([4])
+n = np.array([1])
+BQ = np.array([10])
+net_tax = np.array([100])
+e = np.array([100])
+lambdas = np.array([0.3])
+g_y = 0.1
+print(get_cons(r, w, b, b_splus1, n, BQ, net_tax, (e, lambdas, g_y)))
+
 
 
 def FOC_savings(r, w, b, b_splus1, b_splus2, n, BQ, factor, T_H, params):
@@ -224,6 +245,57 @@ def FOC_savings(r, w, b, b_splus1, b_splus2, n, BQ, factor, T_H, params):
 
     return euler
 
+r = np.array([0.1])
+w = np.array([15])
+b = np.array([5])
+b_splus1 = np.array([4])
+n = np.array([1])
+BQ = np.array([10])
+net_tax = np.array([100])
+e = np.array([100])
+lambdas = np.array([0.3])
+g_y = 0.3
+b_ellipse = 10
+upsilon = 20
+ltilde = 30
+chi_n = np.array([5])
+c = np.array([1])
+sigma = 5
+b_splus2 = np.array([3])
+factor = 100
+T_H = 1000
+beta = 0.5
+chi_b = np.array([0.5])
+theta = 0.3
+tau_bq = np.array([1])
+rho = np.array([0.2])
+J = 10
+S = 5
+etr_params = np.array([[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+                       [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]])
+mtry_params = np.array([[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+                        [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]])
+h_wealth = 1
+p_wealth = 2
+m_wealth = 3
+tau_payroll = 0.25
+retire = 1
+analytical_mtrs = 1
+
+method = 'TPI_scalar'
+print(FOC_savings(r, w, b, b_splus1, b_splus2, n, BQ, factor, T_H,
+                  (e, sigma, beta, g_y, chi_b, theta, tau_bq, rho, lambdas, J, S, \
+                   analytical_mtrs, etr_params, mtry_params, h_wealth, p_wealth, \
+                   m_wealth, tau_payroll, retire, method)))
+
+
+method = 'SS'
+print(FOC_savings(r, w, b, b_splus1, b_splus2, n, BQ, factor, T_H,
+                  (e, sigma, beta, g_y, chi_b, theta, tau_bq, rho, lambdas, J, S, \
+                   analytical_mtrs, etr_params, mtry_params, h_wealth, p_wealth, \
+                   m_wealth, tau_payroll, retire, method)))
+
+
 
 def FOC_labor(r, w, b, b_splus1, n, BQ, factor, T_H, params):
     '''
@@ -295,6 +367,49 @@ def FOC_labor(r, w, b, b_splus1, n, BQ, factor, T_H, params):
 
     return euler
 
+r = np.array([0.1])
+w = np.array([15])
+b = np.array([5])
+b_splus1 = np.array([4])
+n = np.array([1])
+BQ = np.array([10])
+net_tax = np.array([100])
+e = np.array([100])
+lambdas = np.array([0.3])
+g_y = 0.1
+b_ellipse = 10
+upsilon = 20
+ltilde = 30
+chi_n = np.array([5])
+c = np.array([1])
+sigma = 5
+b_splus2 = np.array([3])
+factor = 100
+T_H = 1000
+beta = 0.5
+chi_b = np.array([0.5])
+theta = 0.3
+tau_bq = np.array([1])
+rho = np.array([0.2])
+J = 10
+S = 5
+etr_params = np.array([[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+                      [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]])
+mtrx_params = np.array([[0.6, 0.6, 0,6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6],
+                      [0.6, 0.6, 0, 6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6]])
+h_wealth = 1
+p_wealth = 2
+m_wealth = 3
+tau_payroll = 0.25
+retire = 1
+analytical_mtrs = 1
+
+print(FOC_labor(r, w, b, b_splus1, n, BQ, factor, T_H, (e, sigma, g_y, theta,
+                b_ellipse, upsilon, chi_n, ltilde, tau_bq, lambdas, J, S, analytical_mtrs,
+                etr_params, mtrx_params, h_wealth, p_wealth, m_wealth, tau_payroll, retire, method)))
+
+
+
 
 def constraint_checker_SS(bssmat, nssmat, cssmat, ltilde):
     '''
@@ -319,10 +434,9 @@ def constraint_checker_SS(bssmat, nssmat, cssmat, ltilde):
 
     if (bssmat < 0).any():
         print '\tWARNING: There is negative capital stock'
-    flag2 = False
+        flag2 = False
     if (nssmat < 0).any():
         print '\tWARNING: Labor supply violates nonnegativity constraints.'
-        flag2 = True
     if (nssmat > ltilde).any():
         print '\tWARNING: Labor suppy violates the ltilde constraint.'
         flag2 = True
@@ -332,6 +446,8 @@ def constraint_checker_SS(bssmat, nssmat, cssmat, ltilde):
         print '\tWARNING: Consumption violates nonnegativity constraints.'
     else:
         print '\tThere were no violations of the constraints on consumption.'
+
+
 
 
 def constraint_checker_TPI(b_dist, n_dist, c_dist, t, ltilde):
@@ -354,6 +470,7 @@ def constraint_checker_TPI(b_dist, n_dist, c_dist, t, ltilde):
         # Prints warnings for violations of capital, labor, and
             consumption constraints.
     '''
+
     if (b_dist <= 0).any():
         print '\tWARNING: Aggregate capital is less than or equal to ' \
             'zero in period %.f.' % t
@@ -366,3 +483,8 @@ def constraint_checker_TPI(b_dist, n_dist, c_dist, t, ltilde):
     if (c_dist < 0).any():
         print '\tWARNING: Consumption violates nonnegativity constraints in ' \
             'period %.f.' % t
+
+
+
+
+

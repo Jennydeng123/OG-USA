@@ -35,18 +35,18 @@ def replacement_rate_vals(nssmat, wss, factor_ss, params):
     Returns: theta
     '''
     e, S, retire = params
-    equiv_35 = int(round((S/80.0)*35)) - 1 # adjusts 35 year work history for any S
+    equiv_35 = int( round( (S / 80.0) * 35 ) ) - 1  # adjusts 35 year work history for any S
     if e.ndim == 2:
         dim2 = e.shape[1]
     else:
         dim2 = 1
-    earnings = (e *(wss * nssmat * factor_ss)).reshape(S,dim2)
+    earnings = (e * (wss * nssmat * factor_ss)).reshape( S, dim2 )
     # get highest earning 35 years
-    highest_35_earn = (-1.0*np.sort(-1.0*earnings[:retire,:] ,axis=0))[:equiv_35]
-    AIME = highest_35_earn.sum(0) / ((12.0*(S/80.0))*equiv_35)
-    PIA = np.zeros(dim2)
+    highest_35_earn = (-1.0 * np.sort( -1.0 * earnings[:retire, :], axis=0 ))[:equiv_35]
+    AIME = highest_35_earn.sum( 0 ) / ((12.0 * (S / 80.0)) * equiv_35)
+    PIA = np.zeros( dim2 )
     # Bins from data for each level of replacement
-    for j in xrange(dim2):
+    for j in xrange( dim2 ):
         if AIME[j] < 749.0:
             PIA[j] = .9 * AIME[j]
         elif AIME[j] < 4517.0:
@@ -56,7 +56,7 @@ def replacement_rate_vals(nssmat, wss, factor_ss, params):
     # Set the maximum monthly replacment rate from SS benefits tables
     maxpayment = 3501.00
     PIA[PIA > maxpayment] = maxpayment
-    theta = (PIA*(12.0*S/80.0)) / (factor_ss*wss)
+    theta = (PIA * (12.0 * S / 80.0)) / (factor_ss * wss)
     return theta
 
 
@@ -157,44 +157,44 @@ def tau_income(r, w, b, n, factor, params):
     e, etr_params = params
 
     if etr_params.ndim == 4:
-        A = etr_params[:,:,:,0]
-        B = etr_params[:,:,:,1]
-        C = etr_params[:,:,:,2]
-        D = etr_params[:,:,:,3]
-        max_x = etr_params[:,:,:,4]
-        min_x = etr_params[:,:,:,5]
-        max_y = etr_params[:,:,:,6]
-        min_y = etr_params[:,:,:,7]
-        shift_x = etr_params[:,:,:,8]
-        shift_y = etr_params[:,:,:,9]
-        shift = etr_params[:,:,:,10]
-        share = etr_params[:,:,:,11]
+        A = etr_params[:, :, :, 0]
+        B = etr_params[:, :, :, 1]
+        C = etr_params[:, :, :, 2]
+        D = etr_params[:, :, :, 3]
+        max_x = etr_params[:, :, :, 4]
+        min_x = etr_params[:, :, :, 5]
+        max_y = etr_params[:, :, :, 6]
+        min_y = etr_params[:, :, :, 7]
+        shift_x = etr_params[:, :, :, 8]
+        shift_y = etr_params[:, :, :, 9]
+        shift = etr_params[:, :, :, 10]
+        share = etr_params[:, :, :, 11]
     if etr_params.ndim == 3:
-        A = etr_params[:,:,0]
-        B = etr_params[:,:,1]
-        C = etr_params[:,:,2]
-        D = etr_params[:,:,3]
-        max_x = etr_params[:,:,4]
-        min_x = etr_params[:,:,5]
-        max_y = etr_params[:,:,6]
-        min_y = etr_params[:,:,7]
-        shift_x = etr_params[:,:,8]
-        shift_y = etr_params[:,:,9]
-        shift = etr_params[:,:,10]
-        share = etr_params[:,:,11]
+        A = etr_params[:, :, 0]
+        B = etr_params[:, :, 1]
+        C = etr_params[:, :, 2]
+        D = etr_params[:, :, 3]
+        max_x = etr_params[:, :, 4]
+        min_x = etr_params[:, :, 5]
+        max_y = etr_params[:, :, 6]
+        min_y = etr_params[:, :, 7]
+        shift_x = etr_params[:, :, 8]
+        shift_y = etr_params[:, :, 9]
+        shift = etr_params[:, :, 10]
+        share = etr_params[:, :, 11]
     if etr_params.ndim == 2:
-        A = etr_params[:,0]
-        B = etr_params[:,1]
-        C = etr_params[:,2]
-        D = etr_params[:,3]
-        max_x = etr_params[:,4]
-        min_x = etr_params[:,5]
-        max_y = etr_params[:,6]
-        min_y = etr_params[:,7]
-        shift_x = etr_params[:,8]
-        shift_y = etr_params[:,9]
-        shift = etr_params[:,10]
-        share = etr_params[:,11]
+        A = etr_params[:, 0]
+        B = etr_params[:, 1]
+        C = etr_params[:, 2]
+        D = etr_params[:, 3]
+        max_x = etr_params[:, 4]
+        min_x = etr_params[:, 5]
+        max_y = etr_params[:, 6]
+        min_y = etr_params[:, 7]
+        shift_x = etr_params[:, 8]
+        shift_y = etr_params[:, 9]
+        shift = etr_params[:, 10]
+        share = etr_params[:, 11]
     if etr_params.ndim == 1:
         A = etr_params[0]
         B = etr_params[1]
@@ -209,19 +209,18 @@ def tau_income(r, w, b, n, factor, params):
         shift = etr_params[10]
         share = etr_params[11]
 
-    X = (w*e*n)*factor
-    Y = (r*b)*factor
+    X = (w * e * n) * factor
+    Y = (r * b) * factor
     X2 = X ** 2
     Y2 = Y ** 2
     tau_x = ((max_x - min_x) * (A * X2 + B * X) /
-        (A * X2 + B * X + 1) + min_x)
+             (A * X2 + B * X + 1) + min_x)
     tau_y = ((max_y - min_y) * (C * Y2 + D * Y) /
-        (C * Y2 + D * Y + 1) + min_y)
+             (C * Y2 + D * Y + 1) + min_y)
     tau = (((tau_x + shift_x) ** share) *
-        ((tau_y + shift_y) ** (1 - share))) + shift
+           ((tau_y + shift_y) ** (1 - share))) + shift
 
     return tau
-
 
 
 # Note that since when we use the same functional form, one could use
@@ -282,31 +281,31 @@ def MTR_capital(r, w, b, n, factor, params):
 
     if analytical_mtrs:
         if etr_params.ndim == 3:
-            A = etr_params[:,:,0]
-            B = etr_params[:,:,1]
-            C = etr_params[:,:,2]
-            D = etr_params[:,:,3]
-            max_x = etr_params[:,:,4]
-            min_x = etr_params[:,:,5]
-            max_y = etr_params[:,:,6]
-            min_y = etr_params[:,:,7]
-            shift_x = etr_params[:,:,8]
-            shift_y = etr_params[:,:,9]
-            shift = etr_params[:,:,10]
-            share = etr_params[:,:,11]
+            A = etr_params[:, :, 0]
+            B = etr_params[:, :, 1]
+            C = etr_params[:, :, 2]
+            D = etr_params[:, :, 3]
+            max_x = etr_params[:, :, 4]
+            min_x = etr_params[:, :, 5]
+            max_y = etr_params[:, :, 6]
+            min_y = etr_params[:, :, 7]
+            shift_x = etr_params[:, :, 8]
+            shift_y = etr_params[:, :, 9]
+            shift = etr_params[:, :, 10]
+            share = etr_params[:, :, 11]
         if etr_params.ndim == 2:
-            A = etr_params[:,0]
-            B = etr_params[:,1]
-            C = etr_params[:,2]
-            D = etr_params[:,3]
-            max_x = etr_params[:,4]
-            min_x = etr_params[:,5]
-            max_y = etr_params[:,6]
-            min_y = etr_params[:,7]
-            shift_x = etr_params[:,8]
-            shift_y = etr_params[:,9]
-            shift = etr_params[:,10]
-            share = etr_params[:,11]
+            A = etr_params[:, 0]
+            B = etr_params[:, 1]
+            C = etr_params[:, 2]
+            D = etr_params[:, 3]
+            max_x = etr_params[:, 4]
+            min_x = etr_params[:, 5]
+            max_y = etr_params[:, 6]
+            min_y = etr_params[:, 7]
+            shift_x = etr_params[:, 8]
+            shift_y = etr_params[:, 9]
+            shift = etr_params[:, 10]
+            share = etr_params[:, 11]
         if etr_params.ndim == 1:
             A = etr_params[0]
             B = etr_params[1]
@@ -321,47 +320,47 @@ def MTR_capital(r, w, b, n, factor, params):
             shift = etr_params[10]
             share = etr_params[11]
 
-        X = (w*e*n)*factor
-        Y = (r*b)*factor
+        X = (w * e * n) * factor
+        Y = (r * b) * factor
         X2 = X ** 2
         Y2 = Y ** 2
         tau_x = ((max_x - min_x) * (A * X2 + B * X) /
-            (A * X2 + B * X + 1) + min_x)
+                 (A * X2 + B * X + 1) + min_x)
         tau_y = ((max_y - min_y) * (C * Y2 + D * Y) /
-            (C * Y2 + D * Y + 1) + min_y)
+                 (C * Y2 + D * Y + 1) + min_y)
         tau_x_y = (((tau_x + shift_x) ** share) *
-            ((tau_y + shift_y) ** (1 - share))) + shift
+                   ((tau_y + shift_y) ** (1 - share))) + shift
 
-        tau = ((X+Y)*((tau_x+shift_x)**share)*(1-share)*(max_y-min_y)*\
-               ((2*C*X+D)/((C*X2+D*X+1)**2))*((tau_y+shift_y)**(-share)) + tau_x_y)
+        tau = ((X + Y) * ((tau_x + shift_x) ** share) * (1 - share) * (max_y - min_y) * \
+               ((2 * C * X + D) / ((C * X2 + D * X + 1) ** 2)) * ((tau_y + shift_y) ** (-share)) + tau_x_y)
 
     else:
         if mtry_params.ndim == 3:
-            A = mtry_params[:,:,0]
-            B = mtry_params[:,:,1]
-            C = mtry_params[:,:,2]
-            D = mtry_params[:,:,3]
-            max_x = mtry_params[:,:,4]
-            min_x = mtry_params[:,:,5]
-            max_y = mtry_params[:,:,6]
-            min_y = mtry_params[:,:,7]
-            shift_x = mtry_params[:,:,8]
-            shift_y = mtry_params[:,:,9]
-            shift = mtry_params[:,:,10]
-            share = mtry_params[:,:,11]
+            A = mtry_params[:, :, 0]
+            B = mtry_params[:, :, 1]
+            C = mtry_params[:, :, 2]
+            D = mtry_params[:, :, 3]
+            max_x = mtry_params[:, :, 4]
+            min_x = mtry_params[:, :, 5]
+            max_y = mtry_params[:, :, 6]
+            min_y = mtry_params[:, :, 7]
+            shift_x = mtry_params[:, :, 8]
+            shift_y = mtry_params[:, :, 9]
+            shift = mtry_params[:, :, 10]
+            share = mtry_params[:, :, 11]
         if mtry_params.ndim == 2:
-            A = mtry_params[:,0]
-            B = mtry_params[:,1]
-            C = mtry_params[:,2]
-            D = mtry_params[:,3]
-            max_x = mtry_params[:,4]
-            min_x = mtry_params[:,5]
-            max_y = mtry_params[:,6]
-            min_y = mtry_params[:,7]
-            shift_x = mtry_params[:,8]
-            shift_y = mtry_params[:,9]
-            shift = mtry_params[:,10]
-            share = mtry_params[:,11]
+            A = mtry_params[:, 0]
+            B = mtry_params[:, 1]
+            C = mtry_params[:, 2]
+            D = mtry_params[:, 3]
+            max_x = mtry_params[:, 4]
+            min_x = mtry_params[:, 5]
+            max_y = mtry_params[:, 6]
+            min_y = mtry_params[:, 7]
+            shift_x = mtry_params[:, 8]
+            shift_y = mtry_params[:, 9]
+            shift = mtry_params[:, 10]
+            share = mtry_params[:, 11]
         if mtry_params.ndim == 1:
             A = mtry_params[0]
             B = mtry_params[1]
@@ -376,16 +375,16 @@ def MTR_capital(r, w, b, n, factor, params):
             shift = mtry_params[10]
             share = mtry_params[11]
 
-        X = (w*e*n)*factor
-        Y = (r*b)*factor
+        X = (w * e * n) * factor
+        Y = (r * b) * factor
         X2 = X ** 2
         Y2 = Y ** 2
         tau_x = ((max_x - min_x) * (A * X2 + B * X) /
-            (A * X2 + B * X + 1) + min_x)
+                 (A * X2 + B * X + 1) + min_x)
         tau_y = ((max_y - min_y) * (C * Y2 + D * Y) /
-            (C * Y2 + D * Y + 1) + min_y)
+                 (C * Y2 + D * Y + 1) + min_y)
         tau = (((tau_x + shift_x) ** share) *
-            ((tau_y + shift_y) ** (1 - share))) + shift
+               ((tau_y + shift_y) ** (1 - share))) + shift
 
     return tau
 
@@ -444,31 +443,31 @@ def MTR_labor(r, w, b, n, factor, params):
 
     if analytical_mtrs:
         if etr_params.ndim == 3:
-            A = etr_params[:,:,0]
-            B = etr_params[:,:,1]
-            C = etr_params[:,:,2]
-            D = etr_params[:,:,3]
-            max_x = etr_params[:,:,4]
-            min_x = etr_params[:,:,5]
-            max_y = etr_params[:,:,6]
-            min_y = etr_params[:,:,7]
-            shift_x = etr_params[:,:,8]
-            shift_y = etr_params[:,:,9]
-            shift = etr_params[:,:,10]
-            share = etr_params[:,:,11]
+            A = etr_params[:, :, 0]
+            B = etr_params[:, :, 1]
+            C = etr_params[:, :, 2]
+            D = etr_params[:, :, 3]
+            max_x = etr_params[:, :, 4]
+            min_x = etr_params[:, :, 5]
+            max_y = etr_params[:, :, 6]
+            min_y = etr_params[:, :, 7]
+            shift_x = etr_params[:, :, 8]
+            shift_y = etr_params[:, :, 9]
+            shift = etr_params[:, :, 10]
+            share = etr_params[:, :, 11]
         if etr_params.ndim == 2:
-            A = etr_params[:,0]
-            B = etr_params[:,1]
-            C = etr_params[:,2]
-            D = etr_params[:,3]
-            max_x = etr_params[:,4]
-            min_x = etr_params[:,5]
-            max_y = etr_params[:,6]
-            min_y = etr_params[:,7]
-            shift_x = etr_params[:,8]
-            shift_y = etr_params[:,9]
-            shift = etr_params[:,10]
-            share = etr_params[:,11]
+            A = etr_params[:, 0]
+            B = etr_params[:, 1]
+            C = etr_params[:, 2]
+            D = etr_params[:, 3]
+            max_x = etr_params[:, 4]
+            min_x = etr_params[:, 5]
+            max_y = etr_params[:, 6]
+            min_y = etr_params[:, 7]
+            shift_x = etr_params[:, 8]
+            shift_y = etr_params[:, 9]
+            shift = etr_params[:, 10]
+            share = etr_params[:, 11]
         if etr_params.ndim == 1:
             A = etr_params[0]
             B = etr_params[1]
@@ -483,47 +482,47 @@ def MTR_labor(r, w, b, n, factor, params):
             shift = etr_params[10]
             share = etr_params[11]
 
-        X = (w*e*n)*factor
-        Y = (r*b)*factor
+        X = (w * e * n) * factor
+        Y = (r * b) * factor
         X2 = X ** 2
         Y2 = Y ** 2
         tau_x = ((max_x - min_x) * (A * X2 + B * X) /
-            (A * X2 + B * X + 1) + min_x)
+                 (A * X2 + B * X + 1) + min_x)
         tau_y = ((max_y - min_y) * (C * Y2 + D * Y) /
-            (C * Y2 + D * Y + 1) + min_y)
+                 (C * Y2 + D * Y + 1) + min_y)
         tau_x_y = (((tau_x + shift_x) ** share) *
-            ((tau_y + shift_y) ** (1 - share))) + shift
+                   ((tau_y + shift_y) ** (1 - share))) + shift
 
-        tau = ((X+Y)*share*((tau_x+shift_x)**(share-1))*(max_x-min_x)*\
-               ((2*A*X+B)/((A*X2+B*X+1)**2))*((tau_y+shift_y)**(1-share)) + tau_x_y)
+        tau = ((X + Y) * share * ((tau_x + shift_x) ** (share - 1)) * (max_x - min_x) * \
+               ((2 * A * X + B) / ((A * X2 + B * X + 1) ** 2)) * ((tau_y + shift_y) ** (1 - share)) + tau_x_y)
 
     else:
         if mtrx_params.ndim == 3:
-            A = mtrx_params[:,:,0]
-            B = mtrx_params[:,:,1]
-            C = mtrx_params[:,:,2]
-            D = mtrx_params[:,:,3]
-            max_x = mtrx_params[:,:,4]
-            min_x = mtrx_params[:,:,5]
-            max_y = mtrx_params[:,:,6]
-            min_y = mtrx_params[:,:,7]
-            shift_x = mtrx_params[:,:,8]
-            shift_y = mtrx_params[:,:,9]
-            shift = mtrx_params[:,:,10]
-            share = mtrx_params[:,:,11]
+            A = mtrx_params[:, :, 0]
+            B = mtrx_params[:, :, 1]
+            C = mtrx_params[:, :, 2]
+            D = mtrx_params[:, :, 3]
+            max_x = mtrx_params[:, :, 4]
+            min_x = mtrx_params[:, :, 5]
+            max_y = mtrx_params[:, :, 6]
+            min_y = mtrx_params[:, :, 7]
+            shift_x = mtrx_params[:, :, 8]
+            shift_y = mtrx_params[:, :, 9]
+            shift = mtrx_params[:, :, 10]
+            share = mtrx_params[:, :, 11]
         if mtrx_params.ndim == 2:
-            A = mtrx_params[:,0]
-            B = mtrx_params[:,1]
-            C = mtrx_params[:,2]
-            D = mtrx_params[:,3]
-            max_x = mtrx_params[:,4]
-            min_x = mtrx_params[:,5]
-            max_y = mtrx_params[:,6]
-            min_y = mtrx_params[:,7]
-            shift_x = mtrx_params[:,8]
-            shift_y = mtrx_params[:,9]
-            shift = mtrx_params[:,10]
-            share = mtrx_params[:,11]
+            A = mtrx_params[:, 0]
+            B = mtrx_params[:, 1]
+            C = mtrx_params[:, 2]
+            D = mtrx_params[:, 3]
+            max_x = mtrx_params[:, 4]
+            min_x = mtrx_params[:, 5]
+            max_y = mtrx_params[:, 6]
+            min_y = mtrx_params[:, 7]
+            shift_x = mtrx_params[:, 8]
+            shift_y = mtrx_params[:, 9]
+            shift = mtrx_params[:, 10]
+            share = mtrx_params[:, 11]
         if mtrx_params.ndim == 1:
             A = mtrx_params[0]
             B = mtrx_params[1]
@@ -538,16 +537,16 @@ def MTR_labor(r, w, b, n, factor, params):
             shift = mtrx_params[10]
             share = mtrx_params[11]
 
-        X = (w*e*n)*factor
-        Y = (r*b)*factor
+        X = (w * e * n) * factor
+        Y = (r * b) * factor
         X2 = X ** 2
         Y2 = Y ** 2
         tau_x = (((max_x - min_x) * (A * X2 + B * X) /
-            (A * X2 + B * X + 1)) + min_x)
+                  (A * X2 + B * X + 1)) + min_x)
         tau_y = (((max_y - min_y) * (C * Y2 + D * Y) /
-        (C * Y2 + D * Y + 1)) + min_y)
+                  (C * Y2 + D * Y + 1)) + min_y)
         tau = (((tau_x + shift_x) ** share) *
-            ((tau_y + shift_y) ** (1 - share))) + shift
+               ((tau_y + shift_y) ** (1 - share))) + shift
 
     return tau
 
@@ -567,10 +566,8 @@ def get_biz_tax(w, Y, L, K, params):
     '''
 
     tau_b, delta_tau = params
-    business_revenue = tau_b*(Y-w*L) - tau_b*delta_tau*K
+    business_revenue = tau_b * (Y - w * L) - tau_b * delta_tau * K
     return business_revenue
-
-
 
 
 def total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, params):
@@ -620,11 +617,11 @@ def total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, params):
 
     I = r * b + w * e * n
     TI_params = (e, etr_params)
-    T_I = tau_income(r, w, b, n, factor, TI_params) * I
+    T_I = tau_income( r, w, b, n, factor, TI_params ) * I
 
     T_P = tau_payroll * w * e * n
     TW_params = (h_wealth, p_wealth, m_wealth)
-    T_W = tau_wealth(b, TW_params) * b
+    T_W = tau_wealth( b, TW_params ) * b
 
     if method == 'SS':
         # Depending on if we are looking at b_s or b_s+1, the
@@ -635,7 +632,7 @@ def total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, params):
             T_P[retire:] -= theta * w
         else:
             T_P[retire - 1:] -= theta * w
-        T_BQ = tau_bq * BQ / lambdas
+        T_BQ = tau_bq[j] * BQ / lambdas
     elif method == 'TPI':
         if shift is False:
             # retireTPI is different from retire, because in TPI we are counting backwards
@@ -644,19 +641,46 @@ def total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, params):
             retireTPI = (retire - S)
         else:
             retireTPI = (retire - 1 - S)
-        if len(b.shape) != 3:
+        if len( b.shape ) != 3:
             T_P[retireTPI:] -= theta[j] * w[retireTPI:]
             T_BQ = tau_bq[j] * BQ / lambdas
         else:
-            T_P[:, retire:, :] -= theta.reshape(1, 1, J) * w[:,retire:,:]
-            T_BQ = tau_bq.reshape(1, 1, J) * BQ / lambdas
+            T_P[:, retire:, :] -= theta.reshape( 1, 1, J ) * w[:, retire:, :]
+            T_BQ = tau_bq.reshape( 1, 1, J ) * BQ / lambdas
     elif method == 'TPI_scalar':
         # The above methods won't work if scalars are used.  This option is only called by the
         # SS_TPI_firstdoughnutring function in TPI.
-        #T_P -= theta[j] * w
+        # T_P -= theta[j] * w
         T_P = 0.
         T_BQ = tau_bq[j] * BQ / lambdas
     total_taxes = T_I + T_P + T_BQ + T_W - T_H
 
-
     return total_taxes
+
+
+
+r = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+w = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+b = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+n = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+BQ = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+factor = 1
+T_H = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+j = 0
+shift = 0
+e = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+lambdas = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
+retire = 2
+etr_params = np.array( [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] )
+h_wealth = 1
+p_wealth = 2
+m_wealth = 3
+tau_payroll = 4
+theta = np.array( [0.225] )
+tau_bq = np.array( [1, 1, 1] )
+J = 1
+S = 1
+method = "TPI"
+
+print(total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, (e, lambdas, method, retire,
+                    etr_params, h_wealth, p_wealth, m_wealth, tau_payroll, theta, tau_bq, J, S)))
