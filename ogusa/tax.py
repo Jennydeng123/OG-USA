@@ -658,29 +658,3 @@ def total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, params):
     return total_taxes
 
 
-
-r = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-w = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-b = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-n = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-BQ = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-factor = 1
-T_H = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-j = 0
-shift = 0
-e = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-lambdas = np.array( [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]] )
-retire = 2
-etr_params = np.array( [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] )
-h_wealth = 1
-p_wealth = 2
-m_wealth = 3
-tau_payroll = 4
-theta = np.array( [0.225] )
-tau_bq = np.array( [1, 1, 1] )
-J = 1
-S = 1
-method = "TPI"
-
-print(total_taxes(r, w, b, n, BQ, factor, T_H, j, shift, (e, lambdas, method, retire,
-                    etr_params, h_wealth, p_wealth, m_wealth, tau_payroll, theta, tau_bq, J, S)))
