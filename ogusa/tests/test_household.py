@@ -79,6 +79,12 @@ def test_FOC_savings():
                                    analytical_mtrs, etr_params, mtry_params, h_wealth, p_wealth, \
                                    m_wealth, tau_payroll, retire, method) )
     assert (np.allclose( FOC1, np.array( [-4.328325914762576e-14, -4.328325914762576e-14] ) ))
+    ## here comes the problem, it says that the input for isinf() is not right. It may have something to do with the output
+    ## -4.328325914762576e-14, -4.328325914762576e-14. But -4.328325914762576e-14, -4.328325914762576e-14 is the output from
+    ## the original function. I was trying to change the input to make the numbers more "normal", but failed.
+
+
+
 
     method = 'SS'
     FOC2 = household.FOC_savings( r, w, b, b_splus1, b_splus2, n, BQ, factor, T_H,
